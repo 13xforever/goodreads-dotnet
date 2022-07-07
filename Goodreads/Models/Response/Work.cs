@@ -124,8 +124,12 @@ namespace Goodreads.Models.Response
             var originalPublicationYear = element.ElementAsInt("original_publication_year");
             var originalPublicationMonth = element.ElementAsInt("original_publication_month");
             var originalPublicationDay = element.ElementAsInt("original_publication_day");
-            if (originalPublicationYear != 0 && originalPublicationMonth != 0 && originalPublicationDay != 0)
+            if (originalPublicationYear != 0)
             {
+                if (originalPublicationMonth == 0)
+                    originalPublicationMonth = 1;
+                if (originalPublicationDay == 0)
+                    originalPublicationDay = 1;
                 OriginalPublicationDate = new DateTime(originalPublicationYear, originalPublicationMonth, originalPublicationDay);
             }
 

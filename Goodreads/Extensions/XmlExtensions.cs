@@ -21,43 +21,43 @@ namespace Goodreads.Extensions
 
         public static long ElementAsLong(this XElement element, XName name)
         {
-            var el = element.Element(name);
+            var el = element?.Element(name);
             return long.TryParse(el?.Value, out long value) ? value : default(long);
         }
 
         public static long? ElementAsNullableLong(this XElement element, XName name)
         {
-            var el = element.Element(name);
+            var el = element?.Element(name);
             return long.TryParse(el?.Value, out long value) ? new long?(value) : null;
         }
 
         public static int ElementAsInt(this XElement element, XName name)
         {
-            var el = element.Element(name);
+            var el = element?.Element(name);
             return int.TryParse(el?.Value, out int value) ? value : default(int);
         }
 
         public static int? ElementAsNullableInt(this XElement element, XName name)
         {
-            var el = element.Element(name);
+            var el = element?.Element(name);
             return int.TryParse(el?.Value, out int value) ? new int?(value) : null;
         }
 
         public static decimal ElementAsDecimal(this XElement element, XName name)
         {
-            var el = element.Element(name);
+            var el = element?.Element(name);
             return decimal.TryParse(el?.Value, out decimal value) ? value : default(decimal);
         }
 
         public static decimal? ElementAsNullableDecimal(this XElement element, XName name)
         {
-            var el = element.Element(name);
+            var el = element?.Element(name);
             return decimal.TryParse(el?.Value, out decimal value) ? new decimal?(value) : null;
         }
 
         public static DateTime? ElementAsDate(this XElement element, XName name)
         {
-            var el = element.Element(name);
+            var el = element?.Element(name);
             return DateTime.TryParseExact(el?.Value, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date)
                 ? new DateTime?(date)
                 : null;
@@ -65,7 +65,7 @@ namespace Goodreads.Extensions
 
         public static DateTime? ElementAsDateTime(this XElement element, XName name)
         {
-            var dateElement = element.Element(name);
+            var dateElement = element?.Element(name);
             if (dateElement != null)
             {
                 var value = dateElement.Value;
@@ -100,7 +100,7 @@ namespace Goodreads.Extensions
 
         public static DateTime? ElementAsMonthYear(this XElement element, XName name)
         {
-            var el = element.Element(name);
+            var el = element?.Element(name);
             return DateTime.TryParseExact(el?.Value, "MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date)
                 ? new DateTime?(date)
                 : null;
@@ -153,8 +153,8 @@ namespace Goodreads.Extensions
 
         public static bool ElementAsBool(this XElement element, XName name)
         {
-            var el = element.Element(name);
-            return bool.TryParse(el?.Value, out bool value) ? value : false;
+            var el = element?.Element(name);
+            return bool.TryParse(el?.Value, out bool value) && value;
         }
 
         public static List<T> ParseChildren<T>(this XElement element, XName parentName, XName childName) where T : ApiResponse, new()
@@ -173,7 +173,7 @@ namespace Goodreads.Extensions
 
         public static List<T> ParseChildren<T>(this XElement element, XName parentName, XName childName, Func<XElement, T> parseChild)
         {
-            var parentElement = element.Element(parentName);
+            var parentElement = element?.Element(parentName);
             if (parentElement != null)
             {
                 var childElements = parentElement.Descendants(childName);
@@ -195,8 +195,8 @@ namespace Goodreads.Extensions
 
         public static List<T> ParseChildren<T>(this XElement element) where T : ApiResponse, new()
         {
-            var childElements = element.Elements();
-            if (childElements.Any())
+            var childElements = element?.Elements();
+            if (childElements?.Any() ?? false)
             {
                 var children = new List<T>();
 
@@ -215,26 +215,26 @@ namespace Goodreads.Extensions
 
         public static string AttributeAsString(this XElement element, XName attributeName)
         {
-            var attr = element.Attribute(attributeName);
+            var attr = element?.Attribute(attributeName);
             return string.IsNullOrWhiteSpace(attr?.Value) ? null : attr.Value;
         }
 
         public static int AttributeAsInt(this XElement element, XName attributeName)
         {
-            var attr = element.Attribute(attributeName);
+            var attr = element?.Attribute(attributeName);
             return int.TryParse(attr?.Value, out int value) ? value : default(int);
         }
 
         public static long? AttributeAsNullableLong(this XElement element, XName attributeName)
         {
-            var attr = element.Attribute(attributeName);
+            var attr = element?.Attribute(attributeName);
             return long.TryParse(attr?.Value, out long value) ? new long?(value) : null;
         }
 
         public static bool AttributeAsBool(this XElement element, XName attributeName)
         {
-            var attr = element.Attribute(attributeName);
-            return bool.TryParse(attr?.Value, out bool value) ? value : false;
+            var attr = element?.Attribute(attributeName);
+            return bool.TryParse(attr?.Value, out bool value) && value;
         }
     }
 }
