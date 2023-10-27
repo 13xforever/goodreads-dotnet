@@ -33,7 +33,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("isbn", isbn, ParameterType.UrlSegment),
+                Parameter.CreateParameter("isbn", isbn, ParameterType.UrlSegment),
             };
 
             return await Connection.ExecuteRequest<Book>("book/isbn/{isbn}.xml", parameters, null, "book")
@@ -49,7 +49,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("bookId", bookId, ParameterType.UrlSegment),
+                Parameter.CreateParameter("bookId", bookId, ParameterType.UrlSegment),
             };
 
             return await Connection.ExecuteRequest<Book>("book/show/{bookId}.xml", parameters, null, "book")
@@ -68,17 +68,17 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("title", title, ParameterType.QueryString),
+                Parameter.CreateParameter("title", title, ParameterType.QueryString),
             };
 
             if (!string.IsNullOrEmpty(author))
             {
-                parameters.Add(new Parameter("author", author, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("author", author, ParameterType.QueryString));
             }
 
             if (rating.HasValue)
             {
-                parameters.Add(new Parameter("rating", rating.Value, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("rating", rating.Value, ParameterType.QueryString));
             }
 
             return await Connection.ExecuteRequest<Book>("book/title.xml", parameters, null, "book")
@@ -95,8 +95,8 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("authorId", authorId, ParameterType.UrlSegment),
-                new Parameter("page", page, ParameterType.QueryString)
+                Parameter.CreateParameter("authorId", authorId, ParameterType.UrlSegment),
+                Parameter.CreateParameter("page", page, ParameterType.QueryString)
             };
 
             return await Connection.ExecuteRequest<PaginatedList<Book>>("author/list/{authorId}", parameters, null, "author/books")
@@ -114,9 +114,9 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("q", searchTerm, ParameterType.QueryString),
-                new Parameter("page", page, ParameterType.QueryString),
-                new Parameter(EnumHelpers.QueryParameterKey<BookSearchField>(), EnumHelpers.QueryParameterValue(searchField), ParameterType.QueryString)
+                Parameter.CreateParameter("q", searchTerm, ParameterType.QueryString),
+                Parameter.CreateParameter("page", page, ParameterType.QueryString),
+                Parameter.CreateParameter(EnumHelpers.QueryParameterKey<BookSearchField>(), EnumHelpers.QueryParameterValue(searchField), ParameterType.QueryString)
             };
 
             return await Connection.ExecuteRequest<PaginatedList<Work>>("search", parameters, null, "search").ConfigureAwait(false);
@@ -144,7 +144,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("isbn", string.Join(",", isbns), ParameterType.QueryString)
+                Parameter.CreateParameter("isbn", string.Join(",", isbns), ParameterType.QueryString)
             };
 
             // This endpoint doesn't actually return XML. But instead returns a comma delimited list of book ids.
@@ -190,7 +190,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("bookIds", string.Join(",", bookIds), ParameterType.UrlSegment)
+                Parameter.CreateParameter("bookIds", string.Join(",", bookIds), ParameterType.UrlSegment)
             };
 
             // This response is simple enough that we just parse it here without creating another model
@@ -231,7 +231,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("isbns", string.Join(",", isbns), ParameterType.QueryString)
+                Parameter.CreateParameter("isbns", string.Join(",", isbns), ParameterType.QueryString)
             };
 
             // This endpoint only supports JSON for some reason...

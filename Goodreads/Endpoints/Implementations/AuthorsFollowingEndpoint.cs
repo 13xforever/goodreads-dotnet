@@ -31,7 +31,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("id", authorId, ParameterType.QueryString),
+                Parameter.CreateParameter("id", authorId, ParameterType.QueryString),
             };
 
             return await Connection.ExecuteRequest<AuthorFollowing>(
@@ -39,7 +39,7 @@ namespace Goodreads.Clients
                     parameters,
                     null,
                     "author_following",
-                    Method.POST)
+                    Method.Post)
                     .ConfigureAwait(false);
         }
 
@@ -51,7 +51,7 @@ namespace Goodreads.Clients
         public async Task<bool> Unfollow(long authorFollowingId)
         {
             var endpoint = string.Format(CultureInfo.InvariantCulture, @"author_followings/{0}", authorFollowingId);
-            var response = await Connection.ExecuteRaw(endpoint, null, Method.DELETE).ConfigureAwait(false);
+            var response = await Connection.ExecuteRaw(endpoint, null, Method.Delete).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }

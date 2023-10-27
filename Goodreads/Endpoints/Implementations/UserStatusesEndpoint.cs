@@ -59,25 +59,25 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("user_status[book_id]", bookId, ParameterType.QueryString)
+                Parameter.CreateParameter("user_status[book_id]", bookId, ParameterType.QueryString)
             };
 
             if (page.HasValue)
             {
-                parameters.Add(new Parameter("user_status[page]", page.Value, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("user_status[page]", page.Value, ParameterType.QueryString));
             }
 
             if (percent.HasValue)
             {
-                parameters.Add(new Parameter("user_status[percent]", percent.Value, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("user_status[percent]", percent.Value, ParameterType.QueryString));
             }
 
             if (!string.IsNullOrEmpty(comment))
             {
-                parameters.Add(new Parameter("user_status[body]", comment, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("user_status[body]", comment, ParameterType.QueryString));
             }
 
-            var status = await Connection.ExecuteRequest<UserStatusSummary>("user_status", parameters, null, "user-status", Method.POST).ConfigureAwait(false);
+            var status = await Connection.ExecuteRequest<UserStatusSummary>("user_status", parameters, null, "user-status", Method.Post).ConfigureAwait(false);
 
             return status.Id;
         }
@@ -90,7 +90,7 @@ namespace Goodreads.Clients
         public async Task<bool> Delete(long userStatusId)
         {
             var endpoint = $"user_status/destroy/{userStatusId}";
-            var response = await Connection.ExecuteRaw(endpoint, null, Method.POST).ConfigureAwait(false);
+            var response = await Connection.ExecuteRaw(endpoint, null, Method.Post).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.OK;
         }

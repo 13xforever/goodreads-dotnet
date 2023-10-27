@@ -32,7 +32,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("id", authorId, ParameterType.QueryString)
+                Parameter.CreateParameter("id", authorId, ParameterType.QueryString)
             };
 
             try
@@ -81,7 +81,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("id", workId, ParameterType.UrlSegment)
+                Parameter.CreateParameter("id", workId, ParameterType.UrlSegment)
             };
 
             try
@@ -127,8 +127,8 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("id", seriesId, ParameterType.UrlSegment),
-                new Parameter("page", page, ParameterType.QueryString),
+                Parameter.CreateParameter("id", seriesId, ParameterType.UrlSegment),
+                Parameter.CreateParameter("page", page, ParameterType.QueryString),
             };
 
             return await Connection.ExecuteRequest<Series>("series/show/{id}", parameters, null, "series").ConfigureAwait(false);

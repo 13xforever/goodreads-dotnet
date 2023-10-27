@@ -32,10 +32,10 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("id", groupId, ParameterType.QueryString)
+                Parameter.CreateParameter("id", groupId, ParameterType.QueryString)
             };
 
-            var response = await Connection.ExecuteRaw("group/join", parameters, Method.POST).ConfigureAwait(false);
+            var response = await Connection.ExecuteRaw("group/join", parameters, Method.Post).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.OK;
         }
@@ -54,7 +54,7 @@ namespace Goodreads.Clients
 
             if (sort.HasValue)
             {
-                var parameter = new Parameter(EnumHelpers.QueryParameterKey<SortGroupList>(), EnumHelpers.QueryParameterValue(sort.Value), ParameterType.QueryString);
+                var parameter = Parameter.CreateParameter(EnumHelpers.QueryParameterKey<SortGroupList>(), EnumHelpers.QueryParameterValue(sort.Value), ParameterType.QueryString);
 
                 parameters.Add(parameter);
             }
@@ -72,8 +72,8 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>()
             {
-                new Parameter("q", search, ParameterType.QueryString),
-                new Parameter("page", page, ParameterType.QueryString)
+                Parameter.CreateParameter("q", search, ParameterType.QueryString),
+                Parameter.CreateParameter("page", page, ParameterType.QueryString)
             };
 
             return await Connection.ExecuteRequest<PaginatedList<GroupSummary>>("group/search", parameters, null, "groups/list").ConfigureAwait(false);
@@ -94,13 +94,13 @@ namespace Goodreads.Clients
 
             if (sort.HasValue)
             {
-                var parameter = new Parameter(EnumHelpers.QueryParameterKey<SortGroupInfo>(), EnumHelpers.QueryParameterValue(sort.Value), ParameterType.QueryString);
+                var parameter = Parameter.CreateParameter(EnumHelpers.QueryParameterKey<SortGroupInfo>(), EnumHelpers.QueryParameterValue(sort.Value), ParameterType.QueryString);
                 parameters.Add(parameter);
             }
 
             if (order.HasValue)
             {
-                var parameter = new Parameter(EnumHelpers.QueryParameterKey<OrderInfo>(), EnumHelpers.QueryParameterValue(order.Value), ParameterType.QueryString);
+                var parameter = Parameter.CreateParameter(EnumHelpers.QueryParameterKey<OrderInfo>(), EnumHelpers.QueryParameterValue(order.Value), ParameterType.QueryString);
                 parameters.Add(parameter);
             }
 
@@ -124,13 +124,13 @@ namespace Goodreads.Clients
             var endpoint = $"group/members/{groupId}";
             var parameters = new List<Parameter>
             {
-                new Parameter("page", page, ParameterType.QueryString),
-                new Parameter(EnumHelpers.QueryParameterKey<SortGroupMember>(), EnumHelpers.QueryParameterValue(sort), ParameterType.QueryString)
+                Parameter.CreateParameter("page", page, ParameterType.QueryString),
+                Parameter.CreateParameter(EnumHelpers.QueryParameterKey<SortGroupMember>(), EnumHelpers.QueryParameterValue(sort), ParameterType.QueryString)
             };
 
             if (names?.Length > 0)
             {
-                parameters.Add(new Parameter("q", string.Join(" ", names), ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("q", string.Join(" ", names), ParameterType.QueryString));
             }
 
             return await Connection.ExecuteRequest<PaginatedList<GroupUser>>(endpoint, parameters, null, "group_users").ConfigureAwait(false);

@@ -31,10 +31,10 @@ namespace Goodreads.Http
             Credentials = credentials;
         }
 
-        public async Task<IRestResponse> ExecuteRaw(
+        public async Task<RestResponse> ExecuteRaw(
             string endpoint,
             IEnumerable<Parameter> parameters,
-            Method method = Method.GET)
+            Method method = Method.Get)
         {
             var request = BuildRequest(endpoint, parameters);
             request.Method = method;
@@ -46,14 +46,14 @@ namespace Goodreads.Http
             IEnumerable<Parameter> parameters,
             object data = null,
             string expectedRoot = null,
-            Method method = Method.GET)
+            Method method = Method.Get)
             where T : ApiResponse, new()
         {
             var request = BuildRequest(endpoint, parameters);
             request.RootElement = expectedRoot;
             request.Method = method;
 
-            if (data != null && method != Method.GET)
+            if (data != null && method != Method.Get)
             {
                 request.RequestFormat = DataFormat.Xml;
                 request.AddBody(data);
@@ -65,20 +65,20 @@ namespace Goodreads.Http
         public async Task<T> ExecuteJsonRequest<T>(string endpoint, IEnumerable<Parameter> parameters)
         {
             var request = BuildRequest(endpoint, parameters);
-            var response = await _client.ExecuteGetTaskAsync<T>(request).ConfigureAwait(false);
-            return response.Data;
+            return await _client.GetAsync<T>(request).ConfigureAwait(false);
         }
 
         public async Task<OAuthAccessToken> GetAccessToken(OAuthRequestToken requestToken)
         {
-            _client.Authenticator = OAuth1Authenticator.ForAccessToken(
-                Credentials.ApiKey,
-                Credentials.ApiSecret,
-                requestToken.Token,
-                requestToken.Secret);
-
-            var request = new RestRequest("oauth/access_token", Method.POST);
-            var response = await _client.ExecuteTaskAsync(request).ConfigureAwait(false);
+            var request = new RestRequest("oauth/access_token", Method.Post)
+            {
+                Authenticator = OAuth1Authenticator.ForAccessToken(
+                    Credentials.ApiKey,
+                    Credentials.ApiSecret,
+                    requestToken.Token,
+                    requestToken.Secret)
+            };
+            var response = await _client.ExecuteAsync(request).ConfigureAwait(false);
 
             var queryString = HttpUtility.ParseQueryString(response.Content);
 
@@ -90,10 +90,11 @@ namespace Goodreads.Http
 
         public async Task<OAuthRequestToken> GetRequestToken(string callbackUrl)
         {
-            _client.Authenticator = OAuth1Authenticator.ForRequestToken(Credentials.ApiKey, Credentials.ApiSecret);
-
-            var request = new RestRequest("oauth/request_token", Method.GET);
-            var response = await _client.ExecuteTaskAsync(request).ConfigureAwait(false);
+            var request = new RestRequest("oauth/request_token", Method.Get)
+            {
+                Authenticator = OAuth1Authenticator.ForRequestToken(Credentials.ApiKey, Credentials.ApiSecret)
+            };
+            var response = await _client.ExecuteAsync(request).ConfigureAwait(false);
 
             var queryString = HttpUtility.ParseQueryString(response.Content);
 
@@ -117,7 +118,7 @@ namespace Goodreads.Http
             return _client.BuildUri(request).ToString();
         }
 
-        private static IRestRequest BuildRequest(string endpoint, IEnumerable<Parameter> parameters)
+        private static RestRequest BuildRequest(string endpoint, IEnumerable<Parameter> parameters)
         {
             var request = new RestRequest(endpoint);
 
@@ -131,24 +132,24 @@ namespace Goodreads.Http
 
         private static IRestClient CreateClient(ApiCredentials credentials)
         {
-            var client = new RestClient(new Uri(GoodreadsUrl))
-            {
-                UserAgent = GoodreadsUserAgent
-            };
+            var client = new RestClient(
+                new Uri(GoodreadsUrl),
+                cfg =>
+                {
+                    cfg.UserAgent = GoodreadsUserAgent;
+                    if (!string.IsNullOrEmpty(credentials.OAuthToken) && !string.IsNullOrEmpty(credentials.OAuthTokenSecret))
+                    {
+                        cfg.Authenticator = OAuth1Authenticator.ForProtectedResource(
+                                credentials.ApiKey,
+                                credentials.ApiSecret,
+                                credentials.OAuthToken,
+                                credentials.OAuthTokenSecret);
+                    }
+                }
+            );
 
             client.AddDefaultParameter("key", credentials.ApiKey, ParameterType.QueryString);
             client.AddDefaultParameter("format", "xml", ParameterType.QueryString);
-
-            if (!string.IsNullOrEmpty(credentials.OAuthToken) && !string.IsNullOrEmpty(credentials.OAuthTokenSecret))
-            {
-                client.Authenticator =
-                    OAuth1Authenticator.ForProtectedResource(
-                    credentials.ApiKey,
-                    credentials.ApiSecret,
-                    credentials.OAuthToken,
-                    credentials.OAuthTokenSecret);
-            }
-
             return client;
         }
     }

@@ -37,8 +37,8 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("id", reviewId, ParameterType.QueryString),
-                new Parameter("page", commentsPage, ParameterType.QueryString),
+                Parameter.CreateParameter("id", reviewId, ParameterType.QueryString),
+                Parameter.CreateParameter("page", commentsPage, ParameterType.QueryString),
             };
 
             return await Connection.ExecuteRequest<ReviewDetails>("review/show", parameters, null, "review").ConfigureAwait(false);
@@ -57,9 +57,9 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("user_id", userId, ParameterType.QueryString),
-                new Parameter("book_id", bookId, ParameterType.QueryString),
-                new Parameter("include_review_on_work", findReviewOnDifferentEdition, ParameterType.QueryString)
+                Parameter.CreateParameter("user_id", userId, ParameterType.QueryString),
+                Parameter.CreateParameter("book_id", bookId, ParameterType.QueryString),
+                Parameter.CreateParameter("include_review_on_work", findReviewOnDifferentEdition, ParameterType.QueryString)
             };
 
             return await Connection.ExecuteRequest<ReviewDetails>("review/show_by_user_and_book", parameters, null, "review").ConfigureAwait(false);
@@ -90,13 +90,13 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("v", 2, ParameterType.QueryString),
-                new Parameter("id", userId, ParameterType.QueryString)
+                Parameter.CreateParameter("v", 2, ParameterType.QueryString),
+                Parameter.CreateParameter("id", userId, ParameterType.QueryString)
             };
 
             Action<string, object> addQueryString = (name, value) =>
             {
-                parameters.Add(new Parameter(name, value, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter(name, value, ParameterType.QueryString));
             };
 
             if (!string.IsNullOrWhiteSpace(shelfName))
@@ -167,30 +167,30 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("book_id", bookId, ParameterType.GetOrPost)
+                Parameter.CreateParameter("book_id", bookId, ParameterType.GetOrPost)
             };
 
             if (!string.IsNullOrWhiteSpace(reviewText))
             {
-                parameters.Add(new Parameter("review[review]", reviewText, ParameterType.GetOrPost));
+                parameters.Add(Parameter.CreateParameter("review[review]", reviewText, ParameterType.GetOrPost));
             }
 
             if (rating.HasValue)
             {
-                parameters.Add(new Parameter("review[rating]", rating.Value, ParameterType.GetOrPost));
+                parameters.Add(Parameter.CreateParameter("review[rating]", rating.Value, ParameterType.GetOrPost));
             }
 
             if (dateRead.HasValue)
             {
-                parameters.Add(new Parameter("review[read_at]", dateRead.Value.Date.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture), ParameterType.GetOrPost));
+                parameters.Add(Parameter.CreateParameter("review[read_at]", dateRead.Value.Date.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture), ParameterType.GetOrPost));
             }
 
             if (!string.IsNullOrWhiteSpace(shelfName))
             {
-                parameters.Add(new Parameter("shelf", shelfName, ParameterType.GetOrPost));
+                parameters.Add(Parameter.CreateParameter("shelf", shelfName, ParameterType.GetOrPost));
             }
 
-            var response = await Connection.ExecuteRaw("review.xml", parameters, Method.POST).ConfigureAwait(false);
+            var response = await Connection.ExecuteRaw("review.xml", parameters, Method.Post).ConfigureAwait(false);
             if (response != null && response.StatusCode == HttpStatusCode.Created)
             {
                 try
@@ -228,30 +228,30 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("id", reviewId, ParameterType.UrlSegment)
+                Parameter.CreateParameter("id", reviewId, ParameterType.UrlSegment)
             };
 
             if (reviewText != null)
             {
-                parameters.Add(new Parameter("review[review]", reviewText, ParameterType.GetOrPost));
+                parameters.Add(Parameter.CreateParameter("review[review]", reviewText, ParameterType.GetOrPost));
             }
 
             if (rating.HasValue)
             {
-                parameters.Add(new Parameter("review[rating]", rating.Value, ParameterType.GetOrPost));
+                parameters.Add(Parameter.CreateParameter("review[rating]", rating.Value, ParameterType.GetOrPost));
             }
 
             if (dateRead.HasValue)
             {
-                parameters.Add(new Parameter("review[read_at]", dateRead.Value.Date.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture), ParameterType.GetOrPost));
+                parameters.Add(Parameter.CreateParameter("review[read_at]", dateRead.Value.Date.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture), ParameterType.GetOrPost));
             }
 
             if (!string.IsNullOrWhiteSpace(shelfName))
             {
-                parameters.Add(new Parameter("shelf", shelfName, ParameterType.GetOrPost));
+                parameters.Add(Parameter.CreateParameter("shelf", shelfName, ParameterType.GetOrPost));
             }
 
-            var response = await Connection.ExecuteRaw("review/{id}.xml", parameters, Method.POST).ConfigureAwait(false);
+            var response = await Connection.ExecuteRaw("review/{id}.xml", parameters, Method.Post).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.OK;
         }

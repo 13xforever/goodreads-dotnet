@@ -30,10 +30,10 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("id", userId, ParameterType.QueryString)
+                Parameter.CreateParameter("id", userId, ParameterType.QueryString)
             };
 
-            var response = await Connection.ExecuteRaw("friend/add_as_friend", parameters, Method.POST).ConfigureAwait(false);
+            var response = await Connection.ExecuteRaw("friend/add_as_friend", parameters, Method.Post).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.Created;
         }
@@ -47,7 +47,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("page", page, ParameterType.QueryString)
+                Parameter.CreateParameter("page", page, ParameterType.QueryString)
             };
 
             return await Connection.ExecuteRequest<PaginatedList<FriendRequest>>(
@@ -67,11 +67,11 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("id", friendRequestId, ParameterType.QueryString),
-                new Parameter("response", response ? "Y" : "N", ParameterType.QueryString)
+                Parameter.CreateParameter("id", friendRequestId, ParameterType.QueryString),
+                Parameter.CreateParameter("response", response ? "Y" : "N", ParameterType.QueryString)
             };
 
-            var result = await Connection.ExecuteRaw("friend/confirm_request", parameters, Method.POST).ConfigureAwait(false);
+            var result = await Connection.ExecuteRaw("friend/confirm_request", parameters, Method.Post).ConfigureAwait(false);
 
             return result.StatusCode == HttpStatusCode.NoContent;
         }

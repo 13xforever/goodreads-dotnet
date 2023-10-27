@@ -15,21 +15,21 @@ namespace Goodreads.Extensions
 {
     internal static class RestSharpExtensions
     {
-        public static async Task<T> ExecuteTask<T>(this IRestClient client, IRestRequest request)
+        public static async Task<T> ExecuteTask<T>(this IRestClient client, RestRequest request)
             where T : ApiResponse, new()
         {
-            var ret = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
+            var ret = await client.ExecuteAsync(request).ConfigureAwait(false);
             return ret.ThrowIfException().Deserialize<T>();
         }
 
-        public static async Task<IRestResponse> ExecuteTaskRaw(this IRestClient client, IRestRequest request)
+        public static async Task<RestResponse> ExecuteTaskRaw(this IRestClient client, RestRequest request)
         {
-            var ret = await client.ExecuteTaskAsync(request).ConfigureAwait(false);
+            var ret = await client.ExecuteAsync(request).ConfigureAwait(false);
             request.OnBeforeDeserialization(ret);
             return ret.ThrowIfException();
         }
 
-        public static T Deserialize<T>(this IRestResponse response)
+        public static T Deserialize<T>(this RestResponse response)
             where T : ApiResponse, new()
         {
             response.Request.OnBeforeDeserialization(response);
@@ -65,7 +65,7 @@ namespace Goodreads.Extensions
             }
         }
 
-        private static IRestResponse ThrowIfException(this IRestResponse response)
+        private static RestResponse ThrowIfException(this RestResponse response)
         {
             // Something seriously wrong happened
             if (response.ErrorException != null)
@@ -78,7 +78,7 @@ namespace Goodreads.Extensions
             // The HTTP request didn't even finish
             if (response.ResponseStatus != ResponseStatus.Completed)
             {
-                throw response.ResponseStatus.ToWebException();
+                throw new WebException(response.ResponseStatus.ToString());
             }
 
             // Usually we return null for 404s instead of throwing an exception

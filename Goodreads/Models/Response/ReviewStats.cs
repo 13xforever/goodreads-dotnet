@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
+using System.Text.Json.Serialization;
 using System.Xml.Linq;
-using RestSharp.Deserializers;
 
 namespace Goodreads.Models.Response
 {
@@ -17,7 +17,7 @@ namespace Goodreads.Models.Response
         /// <summary>
         /// The Goodreads Book Id.
         /// </summary>
-        [DeserializeAs(Name = "id")]
+        [JsonPropertyName("id")]
         public long BookId { get; private set; }
 
         /// <summary>

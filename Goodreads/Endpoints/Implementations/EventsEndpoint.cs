@@ -40,25 +40,25 @@ namespace Goodreads.Clients
             if (latitude.HasValue)
             {
                 parameters.Add(
-                    new Parameter("lat", latitude.ToString(), ParameterType.QueryString));
+                    Parameter.CreateParameter("lat", latitude.ToString(), ParameterType.QueryString));
             }
 
             if (longitude.HasValue)
             {
                 parameters.Add(
-                    new Parameter("lng", longitude.ToString(), ParameterType.QueryString));
+                    Parameter.CreateParameter("lng", longitude.ToString(), ParameterType.QueryString));
             }
 
             if (postalCode.HasValue)
             {
                 parameters.Add(
-                    new Parameter("search[postal_code]", postalCode.ToString(), ParameterType.QueryString));
+                    Parameter.CreateParameter("search[postal_code]", postalCode.ToString(), ParameterType.QueryString));
             }
 
             if (!string.IsNullOrEmpty(countryCode))
             {
                 parameters.Add(
-                    new Parameter("search[country_code]", countryCode, ParameterType.QueryString));
+                    Parameter.CreateParameter("search[country_code]", countryCode, ParameterType.QueryString));
             }
 
             if (!latitude.HasValue
@@ -69,7 +69,7 @@ namespace Goodreads.Clients
                 // HACK to return the nearest events for the auth user.
                 // I can't pass empty parameters because API returns a list of USA events instead of the nearest events for the auth user.
                 // So I must send one incorrect parameeter. And it works correctly.
-                parameters.Add(new Parameter("search[US]", "US", ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("search[US]", "US", ParameterType.QueryString));
             }
 
             var result = await Connection.ExecuteRequest<PaginatedList<GoodreadsEvent>>("event", parameters, null, "events").ConfigureAwait(false);

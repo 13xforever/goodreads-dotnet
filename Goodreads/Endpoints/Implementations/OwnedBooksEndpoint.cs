@@ -27,8 +27,8 @@ namespace Goodreads.Clients
 
             var parameters = new List<Parameter>
             {
-                new Parameter("id", userId, ParameterType.QueryString),
-                new Parameter("page", page, ParameterType.QueryString),
+                Parameter.CreateParameter("id", userId, ParameterType.QueryString),
+                Parameter.CreateParameter("page", page, ParameterType.QueryString),
             };
 
             return await Connection.ExecuteRequest<PaginatedList<OwnedBook>>(endpoint, parameters, null, "owned_books").ConfigureAwait(false);
@@ -68,31 +68,31 @@ namespace Goodreads.Clients
 
             var parameters = new List<Parameter>
             {
-                new Parameter("owned_book[book_id]", bookId, ParameterType.QueryString),
-                new Parameter("owned_book[condition_code]", code, ParameterType.QueryString)
+                Parameter.CreateParameter("owned_book[book_id]", bookId, ParameterType.QueryString),
+                Parameter.CreateParameter("owned_book[condition_code]", code, ParameterType.QueryString)
             };
 
             if (!string.IsNullOrEmpty(description))
             {
-                parameters.Add(new Parameter("owned_book[condition_description]", description, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("owned_book[condition_description]", description, ParameterType.QueryString));
             }
 
             if (purchaseDate.HasValue)
             {
-                parameters.Add(new Parameter("owned_book[original_purchase_date]", purchaseDate.Value.ToString("yyyy/MM/dd"), ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("owned_book[original_purchase_date]", purchaseDate.Value.ToString("yyyy/MM/dd"), ParameterType.QueryString));
             }
 
             if (!string.IsNullOrEmpty(purchaseLocation))
             {
-                parameters.Add(new Parameter("owned_book[original_purchase_location]", purchaseLocation, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("owned_book[original_purchase_location]", purchaseLocation, ParameterType.QueryString));
             }
 
             if (bcid.HasValue)
             {
-                parameters.Add(new Parameter("owned_book[unique_code]", bcid, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("owned_book[unique_code]", bcid, ParameterType.QueryString));
             }
 
-            return await Connection.ExecuteRequest<OwnedBookSummary>(endpoint, parameters, null, "owned-book", Method.POST).ConfigureAwait(false);
+            return await Connection.ExecuteRequest<OwnedBookSummary>(endpoint, parameters, null, "owned-book", Method.Post).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Goodreads.Clients
         public async Task<bool> DeleteOwnedBook(long ownedBookId)
         {
             var endpoint = $"owned_books/destroy/{ownedBookId}";
-            var response = await Connection.ExecuteRaw(endpoint, null, Method.POST).ConfigureAwait(false);
+            var response = await Connection.ExecuteRaw(endpoint, null, Method.Post).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }

@@ -32,10 +32,10 @@ namespace Goodreads.Clients
 
             var parameters = new[]
             {
-                 new Parameter("group_id", groupId, ParameterType.QueryString),
-                 new Parameter("page", page, ParameterType.QueryString),
-                 new Parameter(EnumHelpers.QueryParameterKey<GroupFolderSort>(), EnumHelpers.QueryParameterValue(sort), ParameterType.QueryString),
-                 new Parameter(EnumHelpers.QueryParameterKey<OrderInfo>(), EnumHelpers.QueryParameterValue(order), ParameterType.QueryString),
+                 Parameter.CreateParameter("group_id", groupId, ParameterType.QueryString),
+                 Parameter.CreateParameter("page", page, ParameterType.QueryString),
+                 Parameter.CreateParameter(EnumHelpers.QueryParameterKey<GroupFolderSort>(), EnumHelpers.QueryParameterValue(sort), ParameterType.QueryString),
+                 Parameter.CreateParameter(EnumHelpers.QueryParameterKey<OrderInfo>(), EnumHelpers.QueryParameterValue(order), ParameterType.QueryString),
             };
 
             return await Connection.ExecuteRequest<PaginatedList<Topic>>(endpoint, parameters, null, "group_folder/topics").ConfigureAwait(false);
@@ -52,14 +52,14 @@ namespace Goodreads.Clients
 
             var parameters = new List<Parameter>
             {
-                new Parameter("page", page, ParameterType.QueryString),
-                new Parameter(EnumHelpers.QueryParameterKey<GroupFolderSort>(), EnumHelpers.QueryParameterValue(sort), ParameterType.QueryString),
-                new Parameter(EnumHelpers.QueryParameterKey<OrderInfo>(), EnumHelpers.QueryParameterValue(order), ParameterType.QueryString),
+                Parameter.CreateParameter("page", page, ParameterType.QueryString),
+                Parameter.CreateParameter(EnumHelpers.QueryParameterKey<GroupFolderSort>(), EnumHelpers.QueryParameterValue(sort), ParameterType.QueryString),
+                Parameter.CreateParameter(EnumHelpers.QueryParameterKey<OrderInfo>(), EnumHelpers.QueryParameterValue(order), ParameterType.QueryString),
             };
 
             if (viewed)
             {
-                parameters.Add(new Parameter("viewed", viewed, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("viewed", viewed, ParameterType.QueryString));
             }
 
             return await Connection.ExecuteRequest<PaginatedList<Topic>>(endpoint, parameters, null, "group_folder/topics").ConfigureAwait(false);
@@ -79,29 +79,29 @@ namespace Goodreads.Clients
 
             var parameters = new List<Parameter>
             {
-                 new Parameter(EnumHelpers.QueryParameterKey<TopicSubjectType>(), EnumHelpers.QueryParameterValue(type), ParameterType.QueryString),
-                 new Parameter("topic[subject_id]", subjectId, ParameterType.QueryString),
-                 new Parameter("topic[title]", title, ParameterType.QueryString),
-                 new Parameter("topic[question_flag]", isQuestion ? "1" : "0", ParameterType.QueryString),
-                 new Parameter("comment[body_usertext]", comment, ParameterType.QueryString),
+                 Parameter.CreateParameter(EnumHelpers.QueryParameterKey<TopicSubjectType>(), EnumHelpers.QueryParameterValue(type), ParameterType.QueryString),
+                 Parameter.CreateParameter("topic[subject_id]", subjectId, ParameterType.QueryString),
+                 Parameter.CreateParameter("topic[title]", title, ParameterType.QueryString),
+                 Parameter.CreateParameter("topic[question_flag]", isQuestion ? "1" : "0", ParameterType.QueryString),
+                 Parameter.CreateParameter("comment[body_usertext]", comment, ParameterType.QueryString),
             };
 
             if (folderId.HasValue)
             {
-                parameters.Add(new Parameter("topic[folder_id]", folderId.Value, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("topic[folder_id]", folderId.Value, ParameterType.QueryString));
             }
 
             if (addToUpdateFeed)
             {
-                parameters.Add(new Parameter("update_feed", "on", ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("update_feed", "on", ParameterType.QueryString));
             }
 
             if (needDigest)
             {
-                parameters.Add(new Parameter("digest", "on", ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("digest", "on", ParameterType.QueryString));
             }
 
-            return await Connection.ExecuteRequest<Topic>(endpoint, parameters, null, "topic", Method.POST);
+            return await Connection.ExecuteRequest<Topic>(endpoint, parameters, null, "topic", Method.Post);
         }
     }
 }

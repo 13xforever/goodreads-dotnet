@@ -31,7 +31,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("id", authorId, ParameterType.QueryString)
+                Parameter.CreateParameter("id", authorId, ParameterType.QueryString)
             };
 
             return await Connection.ExecuteRequest<Author>("author/show.xml", parameters, null, "author")
@@ -47,7 +47,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("authorName", authorName, ParameterType.UrlSegment)
+                Parameter.CreateParameter("authorName", authorName, ParameterType.UrlSegment)
             };
 
             // This response is simple enough that we just parse it here without creating another model

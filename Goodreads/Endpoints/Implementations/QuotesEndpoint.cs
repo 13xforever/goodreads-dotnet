@@ -40,9 +40,9 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("quote[author_name]", authorName, ParameterType.QueryString),
-                new Parameter("quote[author_id]", authorId, ParameterType.QueryString),
-                new Parameter("quote[body]", quote, ParameterType.QueryString),
+                Parameter.CreateParameter("quote[author_name]", authorName, ParameterType.QueryString),
+                Parameter.CreateParameter("quote[author_id]", authorId, ParameterType.QueryString),
+                Parameter.CreateParameter("quote[body]", quote, ParameterType.QueryString),
             };
 
             if (!bookId.HasValue && string.IsNullOrWhiteSpace(isbn))
@@ -52,15 +52,15 @@ namespace Goodreads.Clients
 
             if (bookId.HasValue)
             {
-                parameters.Add(new Parameter("quote[book_id]", bookId.Value, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("quote[book_id]", bookId.Value, ParameterType.QueryString));
             }
 
             if (!string.IsNullOrWhiteSpace(isbn))
             {
-                parameters.Add(new Parameter("isbn", isbn, ParameterType.QueryString));
+                parameters.Add(Parameter.CreateParameter("isbn", isbn, ParameterType.QueryString));
             }
 
-            var response = await Connection.ExecuteRaw("quotes", parameters, Method.POST).ConfigureAwait(false);
+            var response = await Connection.ExecuteRaw("quotes", parameters, Method.Post).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.Created;
         }

@@ -19,10 +19,10 @@ namespace Goodreads.Http
         /// <param name="parameters">The RestSharp parameters to include in this request.</param>
         /// <param name="method">The HTTP method of this request.</param>
         /// <returns>An async task with the response from the request.</returns>
-        Task<IRestResponse> ExecuteRaw(
+        Task<RestResponse> ExecuteRaw(
             string endpoint,
             IEnumerable<Parameter> parameters,
-            Method method = Method.GET);
+            Method method = Method.Get);
 
         /// <summary>
         /// A common method for executing any request on the Goodreads API.
@@ -39,7 +39,7 @@ namespace Goodreads.Http
             IEnumerable<Parameter> parameters,
             object data = null,
             string expectedRoot = null,
-            Method method = Method.GET)
+            Method method = Method.Get)
             where T : ApiResponse, new();
 
         /// <summary>

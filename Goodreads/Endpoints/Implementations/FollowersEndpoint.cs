@@ -29,7 +29,7 @@ namespace Goodreads.Clients
         public async Task<UserFollowingSummary> Follow(long userId)
         {
             var endpoint = string.Format(CultureInfo.InvariantCulture, "user/{0}/followers", userId);
-            return await Connection.ExecuteRequest<UserFollowingSummary>(endpoint, null, null, "user-following", Method.POST).ConfigureAwait(false);
+            return await Connection.ExecuteRequest<UserFollowingSummary>(endpoint, null, null, "user-following", Method.Post).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Goodreads.Clients
         public async Task<bool> Unfollow(long userId)
         {
             var endpoint = string.Format(CultureInfo.InvariantCulture, "user/{0}/followers/stop_following", userId);
-            var response = await Connection.ExecuteRaw(endpoint, null, Method.DELETE).ConfigureAwait(false);
+            var response = await Connection.ExecuteRaw(endpoint, null, Method.Delete).ConfigureAwait(false);
 
             return response.StatusCode == HttpStatusCode.OK;
         }
