@@ -31,7 +31,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "id", Value = authorId, Type = ParameterType.QueryString }
+                new Parameter("id", authorId, ParameterType.QueryString),
             };
 
             return await Connection.ExecuteRequest<AuthorFollowing>(

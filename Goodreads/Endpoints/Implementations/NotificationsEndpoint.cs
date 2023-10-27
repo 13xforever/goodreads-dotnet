@@ -29,7 +29,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "page", Value = page, Type = ParameterType.QueryString }
+                new Parameter("page", page, ParameterType.QueryString),
             };
 
             return await Connection.ExecuteRequest<PaginatedList<Notification>>("notifications", parameters, null, "notifications").ConfigureAwait(false);

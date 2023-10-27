@@ -41,36 +41,21 @@ namespace Goodreads.Clients
 
             if (type.HasValue)
             {
-                var parameter = new Parameter
-                {
-                    Name = EnumHelpers.QueryParameterKey<UpdateType>(),
-                    Value = EnumHelpers.QueryParameterValue(type.Value),
-                    Type = ParameterType.QueryString
-                };
+                var parameter = new Parameter(EnumHelpers.QueryParameterKey<UpdateType>(), EnumHelpers.QueryParameterValue(type.Value), ParameterType.QueryString);
 
                 parameters.Add(parameter);
             }
 
             if (filter.HasValue)
             {
-                var parameter = new Parameter
-                {
-                    Name = EnumHelpers.QueryParameterKey<UpdateFilter>(),
-                    Value = EnumHelpers.QueryParameterValue(filter.Value),
-                    Type = ParameterType.QueryString
-                };
+                var parameter = new Parameter(EnumHelpers.QueryParameterKey<UpdateFilter>(), EnumHelpers.QueryParameterValue(filter.Value), ParameterType.QueryString);
 
                 parameters.Add(parameter);
             }
 
             if (maxUpdates.HasValue)
             {
-                var parameter = new Parameter
-                {
-                    Name = "max_updates",
-                    Value = maxUpdates.Value,
-                    Type = ParameterType.QueryString
-                };
+                var parameter = new Parameter("max_updates", maxUpdates.Value, ParameterType.QueryString);
 
                 parameters.Add(parameter);
             }

@@ -31,8 +31,8 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "user_id", Value = userId, Type = ParameterType.QueryString },
-                new Parameter { Name = "page", Value = page, Type = ParameterType.QueryString }
+                new Parameter("user_id", userId, ParameterType.QueryString),
+                new Parameter("page", page, ParameterType.QueryString),
             };
 
             return await Connection.ExecuteRequest<PaginatedList<UserShelf>>("shelf/list", parameters, null, "shelves").ConfigureAwait(false);
@@ -49,9 +49,9 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "name", Value = shelf, Type = ParameterType.QueryString },
-                new Parameter { Name = "book_id", Value = bookId, Type = ParameterType.QueryString },
-                new Parameter { Name = "a", Value = action ?? string.Empty, Type = ParameterType.QueryString }
+                new Parameter("name", shelf, ParameterType.QueryString),
+                new Parameter("book_id", bookId, ParameterType.QueryString),
+                new Parameter("a", action ?? string.Empty, ParameterType.QueryString)
             };
 
             var response = await Connection.ExecuteRaw("shelf/add_to_shelf", parameters, Method.POST).ConfigureAwait(false);
@@ -69,8 +69,8 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "shelves", Value = string.Join(",", shelves), Type = ParameterType.QueryString },
-                new Parameter { Name = "bookids", Value = string.Join(",", bookIds), Type = ParameterType.QueryString }
+                new Parameter("shelves",string.Join(",", shelves), ParameterType.QueryString),
+                new Parameter("bookids", string.Join(",", bookIds), ParameterType.QueryString),
             };
 
             var response = await Connection.ExecuteRaw("shelf/add_books_to_shelves", parameters, Method.POST).ConfigureAwait(false);
@@ -90,30 +90,10 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter
-                {
-                    Name = "user_shelf[name]",
-                    Value = shelf,
-                    Type = ParameterType.QueryString
-                },
-                new Parameter
-                {
-                    Name = "user_shelf[exclusive_flag]",
-                    Value = exclusive ? "true" : "false",
-                    Type = ParameterType.QueryString
-                },
-                new Parameter
-                {
-                    Name = "user_shelf[sortable_flag]",
-                    Value = sortable ? "true" : "false",
-                    Type = ParameterType.QueryString
-                },
-                new Parameter
-                {
-                    Name = "user_shelf[featured]",
-                    Value = featured ? "true" : "false",
-                    Type = ParameterType.QueryString
-                }
+                new Parameter("user_shelf[name]", shelf, ParameterType.QueryString),
+                new Parameter("user_shelf[exclusive_flag]", exclusive ? "true" : "false", ParameterType.QueryString),
+                new Parameter("user_shelf[sortable_flag]", sortable ? "true" : "false", ParameterType.QueryString),
+                new Parameter("user_shelf[featured]", featured ? "true" : "false", ParameterType.QueryString)
             };
 
             return await Connection.ExecuteRequest<UserShelf>(
@@ -140,30 +120,10 @@ namespace Goodreads.Clients
 
             var parameters = new List<Parameter>
             {
-                new Parameter
-                {
-                    Name = "user_shelf[name]",
-                    Value = shelf,
-                    Type = ParameterType.QueryString
-                },
-                new Parameter
-                {
-                    Name = "user_shelf[exclusive_flag]",
-                    Value = exclusive ? "true" : "false",
-                    Type = ParameterType.QueryString
-                },
-                new Parameter
-                {
-                    Name = "user_shelf[sortable_flag]",
-                    Value = sortable ? "true" : "false",
-                    Type = ParameterType.QueryString
-                },
-                new Parameter
-                {
-                    Name = "user_shelf[featured]",
-                    Value = featured ? "true" : "false",
-                    Type = ParameterType.QueryString
-                }
+                new Parameter("user_shelf[name]", shelf, ParameterType.QueryString),
+                new Parameter("user_shelf[exclusive_flag]", exclusive ? "true" : "false", ParameterType.QueryString),
+                new Parameter("user_shelf[sortable_flag]", sortable ? "true" : "false", ParameterType.QueryString),
+                new Parameter("user_shelf[featured]", featured ? "true" : "false", ParameterType.QueryString)
             };
 
             var response = await Connection.ExecuteRaw(endpoint, parameters, Method.PUT).ConfigureAwait(false);

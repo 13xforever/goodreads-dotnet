@@ -34,7 +34,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "id", Value = userId, Type = ParameterType.QueryString }
+                new Parameter("id", userId, ParameterType.QueryString)
             };
 
             return await Connection.ExecuteRequest<User>("user/show", parameters, null, "user").ConfigureAwait(false);
@@ -50,7 +50,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "username", Value = username, Type = ParameterType.QueryString }
+                new Parameter("username", username, ParameterType.QueryString)
             };
 
             return await Connection.ExecuteRequest<User>("user/show", parameters, null, "user").ConfigureAwait(false);
@@ -67,14 +67,9 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "id", Value = userId, Type = ParameterType.QueryString },
-                new Parameter { Name = "page", Value = page, Type = ParameterType.QueryString },
-                new Parameter
-                {
-                    Name = EnumHelpers.QueryParameterKey<SortFriendsList>(),
-                    Value = EnumHelpers.QueryParameterValue(sort),
-                    Type = ParameterType.QueryString
-                }
+                new Parameter("id", userId, ParameterType.QueryString),
+                new Parameter("page", page, ParameterType.QueryString),
+                new Parameter(EnumHelpers.QueryParameterKey<SortFriendsList>(), EnumHelpers.QueryParameterValue(sort), ParameterType.QueryString)
             };
 
             return await Connection.ExecuteRequest<PaginatedList<UserSummary>>("friend/user", parameters, null, "friends").ConfigureAwait(false);
@@ -122,7 +117,7 @@ namespace Goodreads.Clients
 
             var parameters = new List<Parameter>()
             {
-                new Parameter { Name = "page", Value = page, Type = ParameterType.QueryString },
+                new Parameter("page", page, ParameterType.QueryString),
             };
 
             return await Connection.ExecuteRequest<PaginatedList<UserFollowing>>(endpoint, parameters, null, "following").ConfigureAwait(false);
@@ -140,7 +135,7 @@ namespace Goodreads.Clients
 
             var parameters = new List<Parameter>()
             {
-                new Parameter { Name = "page", Value = page, Type = ParameterType.QueryString },
+                new Parameter("page", page, ParameterType.QueryString),
             };
 
             return await Connection.ExecuteRequest<PaginatedList<UserFollowers>>(endpoint, parameters, null, "followers").ConfigureAwait(false);

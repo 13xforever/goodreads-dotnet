@@ -59,22 +59,22 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "user_status[book_id]", Value = bookId, Type = ParameterType.QueryString }
+                new Parameter("user_status[book_id]", bookId, ParameterType.QueryString)
             };
 
             if (page.HasValue)
             {
-                parameters.Add(new Parameter { Name = "user_status[page]", Value = page.Value, Type = ParameterType.QueryString });
+                parameters.Add(new Parameter("user_status[page]", page.Value, ParameterType.QueryString));
             }
 
             if (percent.HasValue)
             {
-                parameters.Add(new Parameter { Name = "user_status[percent]", Value = percent.Value, Type = ParameterType.QueryString });
+                parameters.Add(new Parameter("user_status[percent]", percent.Value, ParameterType.QueryString));
             }
 
             if (!string.IsNullOrEmpty(comment))
             {
-                parameters.Add(new Parameter { Name = "user_status[body]", Value = comment, Type = ParameterType.QueryString });
+                parameters.Add(new Parameter("user_status[body]", comment, ParameterType.QueryString));
             }
 
             var status = await Connection.ExecuteRequest<UserStatusSummary>("user_status", parameters, null, "user-status", Method.POST).ConfigureAwait(false);

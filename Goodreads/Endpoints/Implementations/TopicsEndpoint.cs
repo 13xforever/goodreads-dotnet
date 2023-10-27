@@ -32,20 +32,10 @@ namespace Goodreads.Clients
 
             var parameters = new[]
             {
-                 new Parameter { Name = "group_id", Value = groupId, Type = ParameterType.QueryString },
-                 new Parameter { Name = "page", Value = page, Type = ParameterType.QueryString },
-                 new Parameter
-                 {
-                     Name = EnumHelpers.QueryParameterKey<GroupFolderSort>(),
-                     Value = EnumHelpers.QueryParameterValue(sort),
-                     Type = ParameterType.QueryString
-                 },
-                 new Parameter
-                 {
-                     Name = EnumHelpers.QueryParameterKey<OrderInfo>(),
-                     Value = EnumHelpers.QueryParameterValue(order),
-                     Type = ParameterType.QueryString
-                 }
+                 new Parameter("group_id", groupId, ParameterType.QueryString),
+                 new Parameter("page", page, ParameterType.QueryString),
+                 new Parameter(EnumHelpers.QueryParameterKey<GroupFolderSort>(), EnumHelpers.QueryParameterValue(sort), ParameterType.QueryString),
+                 new Parameter(EnumHelpers.QueryParameterKey<OrderInfo>(), EnumHelpers.QueryParameterValue(order), ParameterType.QueryString),
             };
 
             return await Connection.ExecuteRequest<PaginatedList<Topic>>(endpoint, parameters, null, "group_folder/topics").ConfigureAwait(false);
@@ -62,24 +52,14 @@ namespace Goodreads.Clients
 
             var parameters = new List<Parameter>
             {
-                 new Parameter { Name = "page", Value = page, Type = ParameterType.QueryString },
-                 new Parameter
-                 {
-                     Name = EnumHelpers.QueryParameterKey<GroupFolderSort>(),
-                     Value = EnumHelpers.QueryParameterValue(sort),
-                     Type = ParameterType.QueryString
-                 },
-                 new Parameter
-                 {
-                     Name = EnumHelpers.QueryParameterKey<OrderInfo>(),
-                     Value = EnumHelpers.QueryParameterValue(order),
-                     Type = ParameterType.QueryString
-                 }
+                new Parameter("page", page, ParameterType.QueryString),
+                new Parameter(EnumHelpers.QueryParameterKey<GroupFolderSort>(), EnumHelpers.QueryParameterValue(sort), ParameterType.QueryString),
+                new Parameter(EnumHelpers.QueryParameterKey<OrderInfo>(), EnumHelpers.QueryParameterValue(order), ParameterType.QueryString),
             };
 
             if (viewed)
             {
-                parameters.Add(new Parameter { Name = "viewed", Value = viewed, Type = ParameterType.QueryString });
+                parameters.Add(new Parameter("viewed", viewed, ParameterType.QueryString));
             }
 
             return await Connection.ExecuteRequest<PaginatedList<Topic>>(endpoint, parameters, null, "group_folder/topics").ConfigureAwait(false);
@@ -99,51 +79,26 @@ namespace Goodreads.Clients
 
             var parameters = new List<Parameter>
             {
-                 new Parameter
-                 {
-                     Name = EnumHelpers.QueryParameterKey<TopicSubjectType>(),
-                     Value = EnumHelpers.QueryParameterValue(type),
-                     Type = ParameterType.QueryString
-                 },
-                 new Parameter
-                 {
-                     Name = "topic[subject_id]",
-                     Value = subjectId,
-                     Type = ParameterType.QueryString
-                 },
-                 new Parameter
-                 {
-                     Name = "topic[title]",
-                     Value = title,
-                     Type = ParameterType.QueryString
-                 },
-                 new Parameter
-                 {
-                     Name = "topic[question_flag]",
-                     Value = isQuestion ? "1" : "0",
-                     Type = ParameterType.QueryString
-                 },
-                 new Parameter
-                 {
-                     Name = "comment[body_usertext]",
-                     Value = comment,
-                     Type = ParameterType.QueryString
-                 }
+                 new Parameter(EnumHelpers.QueryParameterKey<TopicSubjectType>(), EnumHelpers.QueryParameterValue(type), ParameterType.QueryString),
+                 new Parameter("topic[subject_id]", subjectId, ParameterType.QueryString),
+                 new Parameter("topic[title]", title, ParameterType.QueryString),
+                 new Parameter("topic[question_flag]", isQuestion ? "1" : "0", ParameterType.QueryString),
+                 new Parameter("comment[body_usertext]", comment, ParameterType.QueryString),
             };
 
             if (folderId.HasValue)
             {
-                parameters.Add(new Parameter { Name = "topic[folder_id]", Value = folderId.Value, Type = ParameterType.QueryString });
+                parameters.Add(new Parameter("topic[folder_id]", folderId.Value, ParameterType.QueryString));
             }
 
             if (addToUpdateFeed)
             {
-                parameters.Add(new Parameter { Name = "update_feed", Value = "on", Type = ParameterType.QueryString });
+                parameters.Add(new Parameter("update_feed", "on", ParameterType.QueryString));
             }
 
             if (needDigest)
             {
-                parameters.Add(new Parameter { Name = "digest", Value = "on", Type = ParameterType.QueryString });
+                parameters.Add(new Parameter("digest", "on", ParameterType.QueryString));
             }
 
             return await Connection.ExecuteRequest<Topic>(endpoint, parameters, null, "topic", Method.POST);

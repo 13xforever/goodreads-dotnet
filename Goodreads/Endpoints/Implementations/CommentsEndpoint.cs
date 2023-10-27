@@ -33,9 +33,9 @@ namespace Goodreads.Clients
 
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "type", Value = EnumHelpers.QueryParameterValue(type), Type = ParameterType.QueryString },
-                new Parameter { Name = "id", Value = resourceId, Type = ParameterType.QueryString },
-                new Parameter { Name = "comment[body]", Value = comment, Type = ParameterType.QueryString }
+                new Parameter("type", EnumHelpers.QueryParameterValue(type), ParameterType.QueryString),
+                new Parameter("id", resourceId, ParameterType.QueryString),
+                new Parameter("comment[body]", comment, ParameterType.QueryString)
             };
 
             var result = await Connection.ExecuteRaw(endpoint, parameters, Method.POST).ConfigureAwait(false);
@@ -56,9 +56,9 @@ namespace Goodreads.Clients
 
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "type", Value = EnumHelpers.QueryParameterValue(type), Type = ParameterType.QueryString },
-                new Parameter { Name = "id", Value = resourceId, Type = ParameterType.QueryString },
-                new Parameter { Name = "page", Value = page, Type = ParameterType.QueryString }
+                new Parameter("type", EnumHelpers.QueryParameterValue(type), ParameterType.QueryString),
+                new Parameter("id", resourceId, ParameterType.QueryString),
+                new Parameter("page", page, ParameterType.QueryString)
             };
 
             return await Connection.ExecuteRequest<PaginatedList<Comment>>(endpoint, parameters, null, "comments").ConfigureAwait(false);

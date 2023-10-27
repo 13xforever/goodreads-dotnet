@@ -30,7 +30,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "id", Value = userId, Type = ParameterType.QueryString }
+                new Parameter("id", userId, ParameterType.QueryString)
             };
 
             var response = await Connection.ExecuteRaw("friend/add_as_friend", parameters, Method.POST).ConfigureAwait(false);
@@ -47,7 +47,7 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "page", Value = page, Type = ParameterType.QueryString }
+                new Parameter("page", page, ParameterType.QueryString)
             };
 
             return await Connection.ExecuteRequest<PaginatedList<FriendRequest>>(
@@ -67,8 +67,8 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "id", Value = friendRequestId, Type = ParameterType.QueryString },
-                new Parameter { Name = "response", Value = response ? "Y" : "N", Type = ParameterType.QueryString }
+                new Parameter("id", friendRequestId, ParameterType.QueryString),
+                new Parameter("response", response ? "Y" : "N", ParameterType.QueryString)
             };
 
             var result = await Connection.ExecuteRaw("friend/confirm_request", parameters, Method.POST).ConfigureAwait(false);

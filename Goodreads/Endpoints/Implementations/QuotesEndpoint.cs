@@ -40,9 +40,9 @@ namespace Goodreads.Clients
         {
             var parameters = new List<Parameter>
             {
-                new Parameter { Name = "quote[author_name]", Value = authorName, Type = ParameterType.QueryString },
-                new Parameter { Name = "quote[author_id]", Value = authorId, Type = ParameterType.QueryString },
-                new Parameter { Name = "quote[body]", Value = quote, Type = ParameterType.QueryString },
+                new Parameter("quote[author_name]", authorName, ParameterType.QueryString),
+                new Parameter("quote[author_id]", authorId, ParameterType.QueryString),
+                new Parameter("quote[body]", quote, ParameterType.QueryString),
             };
 
             if (!bookId.HasValue && string.IsNullOrWhiteSpace(isbn))
@@ -52,12 +52,12 @@ namespace Goodreads.Clients
 
             if (bookId.HasValue)
             {
-                parameters.Add(new Parameter { Name = "quote[book_id]", Value = bookId.Value, Type = ParameterType.QueryString });
+                parameters.Add(new Parameter("quote[book_id]", bookId.Value, ParameterType.QueryString));
             }
 
             if (!string.IsNullOrWhiteSpace(isbn))
             {
-                parameters.Add(new Parameter { Name = "isbn", Value = isbn, Type = ParameterType.QueryString });
+                parameters.Add(new Parameter("isbn", isbn, ParameterType.QueryString));
             }
 
             var response = await Connection.ExecuteRaw("quotes", parameters, Method.POST).ConfigureAwait(false);
