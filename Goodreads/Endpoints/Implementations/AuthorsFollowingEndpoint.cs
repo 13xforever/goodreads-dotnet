@@ -65,8 +65,7 @@ namespace Goodreads.Clients
         {
             var endpoint = string.Format(CultureInfo.InvariantCulture, "author_followings/{0}", authorFollowingId);
 
-            return await Connection.ExecuteRequest<AuthorFollowing>(endpoint, null, null, "author_following")
-                .ConfigureAwait(false);
+            return await Connection.ExecuteRequest<AuthorFollowing>(endpoint, null, null, "author_following").ConfigureAwait(false);
         }
     }
 }

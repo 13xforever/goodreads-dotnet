@@ -25,14 +25,14 @@ namespace Goodreads.Extensions
         public static async Task<RestResponse> ExecuteTaskRaw(this IRestClient client, RestRequest request)
         {
             var ret = await client.ExecuteAsync(request).ConfigureAwait(false);
-            request.OnBeforeDeserialization(ret);
+            request.OnBeforeDeserialization?.Invoke(ret);
             return ret.ThrowIfException();
         }
 
         public static T Deserialize<T>(this RestResponse response)
             where T : ApiResponse, new()
         {
-            response.Request.OnBeforeDeserialization(response);
+            response.Request.OnBeforeDeserialization?.Invoke(response);
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
@@ -67,6 +67,12 @@ namespace Goodreads.Extensions
 
         private static RestResponse ThrowIfException(this RestResponse response)
         {
+            // Usually we return null for 404s instead of throwing an exception
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return response;
+            }
+            
             // Something seriously wrong happened
             if (response.ErrorException != null)
             {
@@ -79,12 +85,6 @@ namespace Goodreads.Extensions
             if (response.ResponseStatus != ResponseStatus.Completed)
             {
                 throw new WebException(response.ResponseStatus.ToString());
-            }
-
-            // Usually we return null for 404s instead of throwing an exception
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return response;
             }
 
             // Try and find an error from the Goodreads response
